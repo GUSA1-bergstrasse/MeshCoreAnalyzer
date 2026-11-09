@@ -269,7 +269,11 @@ commercial use requires a commercial SimpleBLE license.
 The licenses of all included third-party components are in the `legal` folder of the distribution;
 `legal\THIRD-PARTY-NOTICES.txt` gives an overview. Map data © OpenStreetMap contributors.
 
-## 12. AI disclosure
+## 12. No warranty
+
+This project is provided **as is**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.  The authors and copyright holders are not liable for any claim, damages, or other liability arising from or in connection with the software or its use. You use it at your own risk.   
+
+## 13. AI disclosure
 
 This application and its documentation were developed with the help of AI coding assistants. The
 author defined the requirements, made the design decisions, and reviewed and tested the results,
