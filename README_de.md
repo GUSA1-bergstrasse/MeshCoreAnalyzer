@@ -43,7 +43,8 @@ diesem Handbuch im englischen Original.
   - [9. Gespeicherte Daten und Zurücksetzen](#9-gespeicherte-daten-und-zurücksetzen)
   - [10. Fehlerbehebung](#10-fehlerbehebung)
   - [11. Lizenz](#11-lizenz)
-  - [12. Hinweis zum KI-Einsatz](#12-hinweis-zum-ki-einsatz)
+  - [12. Keine Gewährleistung](#12-keine-gewährleistung)
+  - [13. Hinweis zum KI-Einsatz](#13-hinweis-zum-ki-einsatz)
 
 ## 1. Erste Schritte
 
