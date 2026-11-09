@@ -38,6 +38,7 @@ on a map.
   - [9. Stored data and reset](#9-stored-data-and-reset)
   - [10. Troubleshooting](#10-troubleshooting)
   - [11. License](#11-license)
+  - [12. No Warranty](#12-no-warranty)
   - [12. AI disclosure](#12-ai-disclosure)
 
 ## 1. Getting started
