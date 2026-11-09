@@ -290,7 +290,11 @@ SimpleBLE-Lizenz.
 Die Lizenzen aller enthaltenen Fremdkomponenten liegen im Ordner `legal` der Distribution;
 `legal\THIRD-PARTY-NOTICES.txt` gibt einen Überblick. Kartendaten © OpenStreetMap-Mitwirkende.
 
-## 12. Hinweis zum KI-Einsatz
+## 12. Keine Gewährleistung
+
+Dieses Projekt wird **ohne jegliche Gewährleistung** bereitgestellt, sei es ausdrücklich oder stillschweigend, einschließlich, aber nicht beschränkt auf die Gewährleistung der Handelsüblichkeit, der Eignung für einen bestimmten Zweck und der Nichtverletzung von Rechten Dritter. Die Autoren und Inhaber des Urheberrechts sind nicht haftbar für irgendwelche Ansprüche, Schäden oder sonstige Haftung, die aus der Software oder deren Verwendung entstehen. Du verwendest es auf eigenes Risiko.   
+
+## 13. Hinweis zum KI-Einsatz
 
 Diese Anwendung und ihre Dokumentation wurden mithilfe von KI-Programmierassistenten entwickelt. Der
 Autor hat die Anforderungen festgelegt, die Entwurfsentscheidungen
