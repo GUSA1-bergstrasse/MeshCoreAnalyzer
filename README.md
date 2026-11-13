@@ -30,6 +30,7 @@ on a map.
   - [2. The main window](#2-the-main-window)
   - [3. Overview](#3-overview)
   - [4. Repeater details](#4-repeater-details)
+    - [Timeline](#timeline)
   - [5. Loops](#5-loops)
   - [6. Map](#6-map)
     - [Routes](#routes)
@@ -38,7 +39,7 @@ on a map.
   - [9. Stored data and reset](#9-stored-data-and-reset)
   - [10. Troubleshooting](#10-troubleshooting)
   - [11. License](#11-license)
-  - [12. No Warranty](#12-no-warranty)
+  - [12. No warranty](#12-no-warranty)
   - [13. AI disclosure](#13-ai-disclosure)
 
 ## 1. Getting started
@@ -157,6 +158,22 @@ The detail page of a repeater shows:
 that scope; their headings then show the scope, e.g. `Channels – de-he`. Click the line again to
 remove the filter.
 
+### Timeline
+
+![Timeline of a repeater: packets per hour with a growing evening peak](images/timeline.png)
+
+**Show timeline** (next to *Show loops*) opens a bar chart of the packets this repeater handled over
+time. Each bar is one interval – **1 hour**, **4 hours**, **12 hours** or **1 day** (local time,
+default 1 hour) – and its height is the number of packets. The chart covers the whole stored
+capture, intervals without packets show as empty bars, and long captures scroll sideways.
+
+The **Scope**, **Message type** and **Channel** drop-downs list the entries of the three lists on the
+detail page. Each takes one value or *All*; several filters combine, so a packet is counted only if
+it matches all of them (packets without a channel are excluded once a channel is chosen, direct-routed
+packets match no scope). Point at a bar to see its exact time span and count. With the 1-hour interval
+only every fourth hour is labelled on the time axis (every bar still has a tick). While capture is
+running the chart updates; interval and filters are kept until you leave the page.
+
 ## 5. Loops
 
 A loop is a packet whose path contains the same repeater more than once. The loop list shows, newest
@@ -179,10 +196,11 @@ the "Minimum path hash size" count as loops (see [Settings](#7-settings)).
 **Map** on the overview shows the overview repeaters with a known position on a street map, together
 with your companion (orange diamond). Repeaters without a position are listed on the right.
 
-![Map with repeaters, route lines, a pinned route label and the zoom buttons](images/map.jpg)
+![Map with repeaters, route lines, a pinned route label and the zoom and centre buttons](images/map.jpg)
 
 - **Move and zoom:** drag the map; zoom with the mouse wheel, by double-clicking, or with the **+** /
-  **−** buttons in the bottom-left corner.
+  **−** buttons in the bottom-left corner. The **◎** button below them centres the map on the
+  companion's own position at street level; it is disabled while that position is unknown.
 - **Repeater menu:** click a repeater for *Show routes of …* (see below) and *Open details*.
 
 ### Routes

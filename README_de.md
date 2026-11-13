@@ -35,6 +35,7 @@ diesem Handbuch im englischen Original.
   - [2. Das Hauptfenster](#2-das-hauptfenster)
   - [3. Übersicht](#3-übersicht)
   - [4. Repeater-Details](#4-repeater-details)
+    - [Zeitverlauf](#zeitverlauf)
   - [5. Schleifen](#5-schleifen)
   - [6. Karte](#6-karte)
     - [Routen](#routen)
@@ -168,6 +169,25 @@ Die Detailseite eines Repeaters zeigt:
 *Channels* auf diesen Scope; ihre Überschriften nennen ihn dann, z. B. `Channels – de-he`. Ein
 erneuter Klick auf die Zeile hebt den Filter auf.
 
+### Zeitverlauf
+
+![Zeitverlauf eines Repeaters: Pakete pro Stunde mit wachsender Abendspitze](images/timeline.png)
+
+**Show timeline** (neben *Show loops*) öffnet ein Balkendiagramm der Pakete, die dieser Repeater im
+Zeitverlauf verarbeitet hat. Jeder Balken ist ein Intervall – **1 hour**, **4 hours**, **12 hours**
+oder **1 day** (Ortszeit, Standard 1 Stunde) – und seine Höhe ist die Anzahl der Pakete. Das Diagramm
+umfasst den gesamten gespeicherten Mitschnitt, Intervalle ohne Pakete erscheinen als leere Balken,
+lange Mitschnitte lassen sich seitlich scrollen.
+
+Die Auswahlfelder **Scope**, **Message type** und **Channel** listen die Einträge der drei Listen der
+Detailseite. Jedes nimmt einen Wert oder *All*; mehrere Filter wirken zusammen, ein Paket wird also
+nur gezählt, wenn es alle erfüllt (Pakete ohne Channel entfallen, sobald ein Channel gewählt ist,
+direkt gerouteten Pakete passen auf keinen Scope). Mit der Maus auf einem Balken erscheinen
+Zeitspanne und genaue Anzahl. Beim Intervall 1 hour ist nur jede vierte Stunde an der Zeitachse
+beschriftet (jeder Balken hat weiterhin einen Teilstrich). Während der Aufzeichnung aktualisiert
+sich das Diagramm; Intervall und
+Filter bleiben bis zum Verlassen der Seite erhalten.
+
 ## 5. Schleifen
 
 Eine Schleife ist ein Paket, in dessen Weg derselbe Repeater mehrmals vorkommt. Die Schleifenliste
@@ -192,10 +212,11 @@ Pakete, die mindestens die „Minimum path hash size“ verwenden (siehe
 Straßenkarte, zusammen mit Ihrem Companion (orange Raute). Repeater ohne Position stehen rechts in
 einer Liste.
 
-![Karte mit Repeatern, Routenlinien, einer angehefteten Routenbeschriftung und den Zoom-Schaltflächen](images/map.jpg)
+![Karte mit Repeatern, Routenlinien, einer angehefteten Routenbeschriftung sowie den Zoom- und Zentrieren-Schaltflächen](images/map.jpg)
 
 - **Verschieben und zoomen:** Karte ziehen; zoomen mit dem Mausrad, per Doppelklick oder mit den
-  Schaltflächen **+** / **−** unten links.
+  Schaltflächen **+** / **−** unten links. Die Schaltfläche **◎** darunter zentriert die Karte auf
+  die eigene Position des Companions in Straßenebene; solange diese unbekannt ist, ist sie deaktiviert.
 - **Repeater-Menü:** Ein Klick auf einen Repeater bietet *Show routes of …* (siehe unten) und
   *Open details*.
 
