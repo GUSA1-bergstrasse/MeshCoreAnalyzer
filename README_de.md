@@ -129,7 +129,7 @@ Pakete eintreffen.
 | Name, Id | Name des Repeaters und die ersten 8 Zeichen seines öffentlichen Schlüssels |
 | Hops away | Geringste Hop-Zahl aller bekannten Wege zum Repeater |
 | Distance | Luftlinie zu Ihrem Companion; nur sichtbar, wenn dessen eigene Position bekannt ist |
-| Signal | SNR und RSSI aus dem letzten Scan; `-`, wenn der Repeater nicht geantwortet hat |
+| Signal | SNR und RSSI aus dem letzten Scan; bei Repeatern ohne Antwort der Durchschnitt der direkt von ihnen empfangenen Pakete, in Grau (siehe unten); `-`, wenn es keinen gibt |
 | Total packets | Pakete, die über diesen Repeater liefen; `(+N ambiguous)` zählt Pakete, die auch zu einem anderen Repeater gehören könnten |
 | Max hops unscoped / scoped | Längster Weg (in Hops, dieser Repeater eingeschlossen) eines Flood-Pakets ohne / mit Regions-Scope |
 | Loops | Anzahl der Pakete mit Schleife |
@@ -145,6 +145,14 @@ Leeren Sie das Feld, um wieder alle Repeater zu sehen.
 **Scan nearby** bittet die Repeater in direkter Reichweite, sich zu melden; sie antworten mit ihrem
 Signal. Nach dem Verbinden geschieht das einmal automatisch. Repeater antworten höchstens 4-mal in
 2 Minuten. So gefundene Repeater zeigen ihre ID, bis ihr Name bekannt ist.
+
+**Graue Signalwerte:** Ein Repeater, der nicht auf den Scan geantwortet hat, bekommt trotzdem ein
+Signal, wenn der Companion Flood-Pakete direkt von ihm empfangen hat (er war der letzte Repeater im
+Paketweg; Pakete mit 1-Byte-Pfad-Hashes und Pakete, die zu mehreren Repeatern passen könnten, werden
+nicht verwendet). Die Zelle zeigt den Durchschnitt in Grau; der Tooltip nennt die Paketanzahl. Das
+Funkgerät meldet keinen RSSI unter −127 dBm; liegt ein Messwert auf dieser Untergrenze, steht vor
+dem RSSI ein `≤`, z. B. `-11.4 dB / ≤ -127 dBm`: der wahre Durchschnitt ist kleiner oder gleich.
+Eine Scan-Antwort hat immer Vorrang und wird normal dargestellt.
 
 **Map** öffnet die [Karte](#6-karte).
 
@@ -219,6 +227,7 @@ einer Liste.
   die eigene Position des Companions in Straßenebene; solange diese unbekannt ist, ist sie deaktiviert.
 - **Repeater-Menü:** Ein Klick auf einen Repeater bietet *Show routes of …* (siehe unten) und
   *Open details*.
+- **Companion-Menü:** Ein Klick auf die orange Raute bietet *Show routes of Companion* (siehe unten).
 
 ### Routen
 
@@ -239,8 +248,25 @@ bekannt ist, gibt es womöglich gar nicht; sie erscheint als **gestrichelte** Li
 **Include ambiguous routes** angehakt ist. Schalten Sie einen Repeater ohne Route ein, zeigt die
 Karte *No routes known for …*.
 
+**Routen vom Companion:** *Show routes of Companion* im Menü des Companions zeichnet eine Linie vom
+Companion zu jedem Repeater, von dem er direkt Pakete empfangen hat (dieselbe Regel wie beim grauen
+Signal in der Übersicht), in einem dunkleren Orange als die violetten Repeater-Routen. Mit der Maus
+über einer Linie erscheint die Paketanzahl; ein Klick heftet die Beschriftung an, z. B.
+`Alpha→Companion 12`. Der Schalter ist unabhängig von *All routes*, folgt *Include ambiguous routes*
+auf dieselbe Weise (unbestätigte Linien sind gestrichelt), und die Karte zeigt *No routes known for
+Companion*, wenn es nichts zu zeichnen gibt.
+
 Der Kartenhintergrund kommt von OpenStreetMap und braucht Internet. Offline bleibt der Hintergrund
 grau, Repeater und Routen werden aber weiter angezeigt.
+
+**Ohne verbundenen Companion** zeigt die Karte die Repeater trotzdem: Der Analyzer merkt sich die
+zuletzt bekannte Position jedes Repeaters seiner Liste und lädt sie beim Start. Positionen eines
+verbundenen Companions (oder eines signierten Adverts) haben immer Vorrang und aktualisieren den
+Speicher. Fahren Sie über einen Repeater, dessen Position nur gemerkt ist, sehen Sie *Last known
+position (remembered), last confirmed <Datum>*. Ein Repeater, den der Companion nicht mehr listet,
+verliert seine gemerkte Position. Die eigene Position Ihres Companions wird nur gespeichert, wenn Sie
+in den Einstellungen *Remember the companion's own position* einschalten (siehe
+[Einstellungen](#7-einstellungen)).
 
 ## 7. Einstellungen
 
@@ -251,6 +277,7 @@ grau, Repeater und Routen werden aber weiter angezeigt.
 | Region Names | Liste von Regionsnamen | leer | Namen, mit denen der Analyzer Pakete mit Scope beschriften kann, zusätzlich zu den Angaben der Repeater |
 | Channel Names | Liste von Hashtag-Kanälen | leer | Eigene Kanäle (z. B. `#mein-kanal`), damit deren Pakete benannt werden |
 | Region Lookup | Ask nearby repeaters for their regions | an | Sendet kleine, begrenzte Anfragen (siehe [unten](#8-was-der-analyzer-sendet)) |
+| Map | Remember the companion's own position | aus | Speichert die Position, die Ihr Companion von sich meldet, damit die Karte Companion und seine Routen auch ohne Verbindung zeigt; Ausschalten löscht sie |
 | Loop Detection | Longest radio hop (km) | 25 | Weiter voneinander entfernte Repeater gelten nicht als derselbe Weg-Eintrag; 0 schaltet das aus |
 | Loop Detection | Minimum path hash size (bytes) | 2 | Nur Pakete mit mindestens dieser Weg-ID-Größe können Schleifen zeigen |
 | Community Catalogs | Update catalogs now | – | Lädt die neuesten öffentlichen Kanal- und Regionskataloge herunter |
@@ -279,13 +306,14 @@ Webseite nur, wenn Sie darauf klicken.
 ## 9. Gespeicherte Daten und Zurücksetzen
 
 Alle Daten liegen in `%APPDATA%\MeshCoreAnalyzer\`: empfangene Pakete (ohne Nachrichteninhalte), die
-bekannten Repeater, Ihre Einstellungen, heruntergeladene Kataloge und zwischengespeicherte
-Kartenkacheln. Die Statistiken werden bei jedem Start aus den gespeicherten Paketen neu aufgebaut und
-bleiben so über Neustarts erhalten.
+bekannten Repeater, die zuletzt bekannten Repeater-Positionen (`positions.bin`), Ihre Einstellungen,
+heruntergeladene Kataloge und zwischengespeicherte Kartenkacheln. Die Statistiken werden bei jedem
+Start aus den gespeicherten Paketen neu aufgebaut und bleiben so über Neustarts erhalten.
 
-**Reset data** in der Statusleiste löscht die empfangenen Pakete und Statistiken; Repeater und
-Einstellungen bleiben erhalten. Mit dem Häkchen *Also reset repeater data* werden zusätzlich gelernte
-Regionen, Entfernungen und Namen vergessen.
+**Reset data** in der Statusleiste löscht die empfangenen Pakete und Statistiken; Repeater, gemerkte
+Positionen und Einstellungen bleiben erhalten. Mit dem Häkchen *Also reset repeater data* werden
+zusätzlich gelernte Regionen, Entfernungen, Namen und die gemerkten Positionen (auch die des
+Companions) vergessen.
 
 ## 10. Fehlerbehebung
 

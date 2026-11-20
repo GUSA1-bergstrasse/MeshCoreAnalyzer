@@ -120,7 +120,7 @@ settings. The list updates continuously while packets arrive.
 | Name, Id | Repeater name and the first 8 characters of its public key |
 | Hops away | Fewest hops of any known path to the repeater |
 | Distance | Straight-line distance from your companion; shown only when the companion's own position is known |
-| Signal | SNR and RSSI from the last scan; `-` if the repeater did not answer |
+| Signal | SNR and RSSI from the last scan; for repeaters that did not answer, the average of the packets received directly from them, in grey (see below); `-` if there is none |
 | Total packets | Packets that went through this repeater; `(+N ambiguous)` counts packets that may also belong to another repeater |
 | Max hops unscoped / scoped | Longest path (in hops, this repeater included) of a flood packet without / with a region scope |
 | Loops | Number of looping packets |
@@ -135,6 +135,14 @@ repeaters again.
 **Scan nearby** asks the repeaters in direct range to identify themselves; they answer with their
 signal. The analyzer does this once automatically after connecting. Repeaters answer at most 4 times
 per 2 minutes. Repeaters found this way show their ID until their name is known.
+
+**Grey signal values:** a repeater that did not answer the scan still gets a signal when the companion
+received flood packets directly from it (it was the last repeater in the packet's path; packets with
+1-byte path hashes and packets that could belong to several repeaters are not used). The cell shows
+the average, in grey; hover it for the number of packets. The radio cannot report an RSSI below
+−127 dBm, so when any reading sits at that floor the RSSI carries a `≤`, for example
+`-11.4 dB / ≤ -127 dBm`: the real average is lower or equal. A scan answer always wins and is shown
+in normal text.
 
 **Map** opens the [map](#6-map).
 
@@ -202,6 +210,7 @@ with your companion (orange diamond). Repeaters without a position are listed on
   **−** buttons in the bottom-left corner. The **◎** button below them centres the map on the
   companion's own position at street level; it is disabled while that position is unknown.
 - **Repeater menu:** click a repeater for *Show routes of …* (see below) and *Open details*.
+- **Companion menu:** click the orange diamond for *Show routes of Companion* (see below).
 
 ### Routes
 
@@ -221,8 +230,23 @@ clearly identified both repeaters. Their counts include uncertain packets and sh
 **dashed** line only when **Include ambiguous routes** is ticked. If you switch on a repeater that has
 no route, the map shows *No routes known for …*.
 
+**Routes from the companion:** *Show routes of Companion* in the companion's menu draws a line from the
+companion to every repeater it received packets from directly (the same rule as the grey signal in
+the overview), in a darker orange than the purple repeater routes. Hover a line for the packet count
+and click it to pin the label, e.g. `Alpha→Companion 12`. The switch does not depend on *All routes*,
+follows *Include ambiguous routes* in the same way (unconfirmed lines are dashed), and the map shows
+*No routes known for Companion* when there is nothing to draw.
+
 The map background is loaded from OpenStreetMap and needs internet access. Offline the background
 stays grey, but repeaters and routes are still shown.
+
+**Without a connected companion** the map still shows the repeaters: the analyzer remembers the last
+known position of every repeater in its list and loads it at start. Positions reported by a connected
+companion (or by a signed advert) always take precedence and refresh the memory. Hover a repeater
+whose position is only remembered to see *Last known position (remembered), last confirmed <date>*.
+A repeater that the companion no longer lists loses its remembered position. Your companion's own
+position is not stored unless you switch on *Remember the companion's own position* in the settings
+(see [Settings](#7-settings)).
 
 ## 7. Settings
 
@@ -233,6 +257,7 @@ stays grey, but repeaters and routes are still shown.
 | Region Names | List of region names | empty | Names the analyzer can use to label scoped packets, in addition to those reported by repeaters |
 | Channel Names | List of hashtag channels | empty | Your own channels (e.g. `#my-channel`) so their packets are named |
 | Region Lookup | Ask nearby repeaters for their regions | on | Sends small, rate-limited requests (see [below](#8-what-the-analyzer-transmits)) |
+| Map | Remember the companion's own position | off | Stores the position your companion reports for itself so the map can show the companion and its routes without a connection; switching it off deletes it |
 | Loop Detection | Longest radio hop (km) | 25 | Repeaters further apart are not taken for the same path entry; 0 switches this off |
 | Loop Detection | Minimum path hash size (bytes) | 2 | Only packets with at least this path ID size can show loops |
 | Community Catalogs | Update catalogs now | – | Downloads the newest public channel and region catalogs |
@@ -259,11 +284,13 @@ community catalogs. **Lookup node in EU Meshcore Analyzer** opens a web page onl
 ## 9. Stored data and reset
 
 All data is kept in `%APPDATA%\MeshCoreAnalyzer\`: captured packets (without message contents), the
-known repeaters, your settings, downloaded catalogs and cached map tiles. Statistics are rebuilt from
-the stored packets at every start, so they survive restarts.
+known repeaters, the last known repeater positions (`positions.bin`), your settings, downloaded
+catalogs and cached map tiles. Statistics are rebuilt from the stored packets at every start, so they
+survive restarts.
 
-**Reset data** in the status bar deletes the captured packets and statistics; repeaters and settings
-are kept. Tick *Also reset repeater data* to also forget learned regions, distances and names.
+**Reset data** in the status bar deletes the captured packets and statistics; repeaters, remembered
+positions and settings are kept. Tick *Also reset repeater data* to also forget learned regions,
+distances, names and the remembered positions (including a remembered companion position).
 
 ## 10. Troubleshooting
 
